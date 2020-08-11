@@ -1,0 +1,10 @@
+---
+- name: Download Dokuwikis source
+  include: download.yml
+
+- name: Run configuration specific tasks
+  include: configure.yml
+  when: dokuwiki_deploy_config
+
+- name: Install and uninstall plugins
+  include: plugins.yml

@@ -1,0 +1,3 @@
+{% for user in dokuwiki_initial_users %}
+{{ user.name }}:{{ user.password }}:{{ user.realname | default(None) }}:{{ user.email | default(None)}}:{{ user.groups | default([]) | join(',') }}
+{% endfor %}

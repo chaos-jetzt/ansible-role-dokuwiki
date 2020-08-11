@@ -1,0 +1,54 @@
+---
+- name: Create basedir for tar file with propper permissions
+  file:
+    path: "{{ dokuwiki_basedir }}"
+    owner: "{{ dokuwiki_user }}"
+    group: "{{ dokuwiki_group }}"
+    mode: "{{ dokuwiki_file_mode }}"
+    state: directory
+    recurse: yes
+  when: dokuwiki_source == "tar"
+
+- name: Download and extract Dokuwiki tar file
+  unarchive:
+    src: "{{ dokuwiki_source_tar }}"
+    dest: "{{ dokuwiki_basedir }}"
+    remote_src: true
+    extra_opts:
+      - '--strip-components=1'
+    owner: "{{ dokuwiki_user }}"
+    group: "{{ dokuwiki_group }}"
+    mode: "{{ dokuwiki_file_mode }}"
+  when: dokuwiki_source == "tar"
+  tags:
+    - source
+    - download
+
+- name: Download Dokuwiki source via git
+  git:
+    repo: "{{ dokuwiki_source_git_repo }}"
+    version: "{{ dokuwiki_source_git_version }}"
+    dest: "{{ dokuwiki_basedir }}"
+    clone: yes
+    update: yes
+    force: yes
+  when: dokuwiki_source == "git"
+  tags:
+    - source
+    - download
+
+- name: Create datadir and ensure propper file permissions
+  file:
+    path: "{{ item }}"
+    owner: "{{ dokuwiki_user }}"
+    group: "{{ dokuwiki_group }}"
+    mode: "{{ dokuwiki_file_mode }}"
+    state: directory
+    recurse: yes
+  with_items:
+    - "{{ dokuwiki_basedir }}"
+    - "{{ dokuwiki_datadir }}"
+  tags:
+    - source
+    - files
+    - permission

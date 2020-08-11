@@ -1,0 +1,138 @@
+---
+- name: remove install.php
+  file:
+    path: "{{ dokuwiki_basedir }}/install.php"
+    state: absent
+
+- name: Template local.php
+  template:
+    src: local.php.j2
+    dest: "{{ dokuwiki_basedir }}/conf/local.php"
+    owner: "{{ dokuwiki_user }}"
+    group: "{{ dokuwiki_group }}"
+    mode: "{{ dokuwiki_file_mode }}"
+
+- name: Template acl.auth.php
+  template:
+    src: acl.auth.php.j2
+    dest: "{{ dokuwiki_basedir }}/conf/acl.auth.php"
+    owner: "{{ dokuwiki_user }}"
+    group: "{{ dokuwiki_group }}"
+    mode: "{{ dokuwiki_file_mode }}"
+
+- name: Register if users file is present
+  stat:
+    path: "{{ dokuwiki_basedir }}/conf/users.auth.php"
+  when: dokuwiki_authtype == "plain"
+  register: dokuwiki_users_configured
+
+- name: Create users for authtype plain
+  template:
+    src: users.auth.php.j2
+    dest: "{{ dokuwiki_basedir }}/conf/users.auth.php"
+    force: no
+    owner: "{{ dokuwiki_user }}"
+    group: "{{ dokuwiki_group }}"
+    mode: "{{ dokuwiki_file_mode }}"
+  when:
+    - dokuwiki_authtype == "plain"
+    - not dokuwiki_users_configured.stat.exists
+
+- name: Apply additional acronyms to acronyms.conf
+  lineinfile:
+    path: "{{ dokuwiki_basedir }}/conf/acronyms.conf"
+    regexp: "{{ item.short }}\\s+"
+    line: "{{ item.short }} {{ item.long }}"
+    owner: "{{ dokuwiki_user }}"
+    group: "{{ dokuwiki_group }}"
+    mode: "{{ dokuwiki_file_mode }}"
+    state: "{{ item.state | default('present') }}"
+  with_items: "{{ dokuwiki_addional_acronyms }}"
+
+- name: Apply additional entities to entities.conf
+  lineinfile:
+    path: "{{ dokuwiki_basedir }}/conf/entities.conf"
+    regexp: "{{ item.from }}\\s+"
+    line: "{{ item.from }} {{ item.to }}"
+    owner: "{{ dokuwiki_user }}"
+    group: "{{ dokuwiki_group }}"
+    mode: "{{ dokuwiki_file_mode }}"
+    state: "{{ item.state | default('present') }}"
+  with_items: "{{ dokuwiki_addional_entities }}"
+
+# The Dokuwiki Documentation recommends to place your own
+# interwikis in interwikis.local.conf for them to
+# not get overwritting during an upgrade
+# I opted not to do this since this way we can manage the other entries
+# (removal, editing) to as its possible with
+# entities and acronyms and ansible doesn't care if it
+# has to be done on every run
+# https://www.dokuwiki.org/Interwiki
+- name: Apply additional interwikis to interwiki.conf
+  lineinfile:
+    path: "{{ dokuwiki_basedir }}/conf/interwiki.conf"
+    regexp: "{{ item.code }}\\s+"
+    line: "{{ item.code }} {{ item.url }}"
+    owner: "{{ dokuwiki_user }}"
+    group: "{{ dokuwiki_group }}"
+    mode: "{{ dokuwiki_file_mode }}"
+    state: "{{ item.state | default('present') }}"
+  with_items: "{{ dokuwiki_additional_interwikis }}"
+ 
+- name: Apply additional schemes to scheme.conf
+  lineinfile:
+    path: "{{ dokuwiki_basedir }}/conf/scheme.conf"
+    line: "{{ item.scheme | default(item) }}"
+    owner: "{{ dokuwiki_user }}"
+    group: "{{ dokuwiki_group }}"
+    mode: "{{ dokuwiki_file_mode }}"
+    state: "{{ item.state | default('present') }}"
+  with_items: "{{ dokuwiki_additional_schemes }}"
+
+- name: Apply additional smileys to smileys.conf
+  lineinfile:
+    path: "{{ dokuwiki_basedir }}/conf/smileys.local.conf"
+    regexp: "{{ item.code }}\\s+"
+    line: "{{ item.code }} local/{{ item.image }}"
+    owner: "{{ dokuwiki_user }}"
+    group: "{{ dokuwiki_group }}"
+    mode: "{{ dokuwiki_file_mode }}"
+    state: "{{ item.state | default('present') }}"
+    create: yes
+  with_items: "{{ dokuwiki_additional_smileys }}"
+  register: dokuwiki_smileysconf_changed
+
+- name: Ensure local smileys folder exists
+  file:
+    path: "{{ dokuwiki_basedir }}/lib/images/smileys/local/"
+    owner: "{{ dokuwiki_user }}"
+    group: "{{ dokuwiki_group }}"
+    mode: "{{ dokuwiki_file_mode }}"
+    state: directory
+
+- name: Copy smileys to dokuwiki lib dir
+  copy:
+    src: "{{ item.source | default(item.image) }}"
+    dest: "{{ dokuwiki_basedir }}/lib/images/smileys/local/{{ item.image }}"
+    owner: "{{ dokuwiki_user }}"
+    group: "{{ dokuwiki_group }}"
+    mode: "{{ dokuwiki_file_mode }}"
+  with_items: "{{ dokuwiki_additional_smileys }}"
+  when:
+    - dokuwiki_smileysconf_changed.changed
+    - item.source is not defined or not item.source | regex_search('(https?|ftp)\:\/\/')
+    - item.state is not defined or item.state == "present"
+
+- name: Download smileys to dokuwiki lib dir
+  get_url:
+    url: "{{ item.source }}"
+    dest: "{{ dokuwiki_basedir }}/lib/images/smileys/local/{{ item.image }}"
+    owner: "{{ dokuwiki_user }}"
+    group: "{{ dokuwiki_group }}"
+    mode: "{{ dokuwiki_file_mode }}"
+  with_items: "{{ dokuwiki_additional_smileys }}"
+  when:
+    - dokuwiki_smileysconf_changed.changed
+    - item.source is defined
+    - item.source | regex_search('(https?|ftp)\:\/\/')
+    - item.state is not defined or item.state == "present"

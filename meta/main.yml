@@ -1,0 +1,15 @@
+galaxy_info:
+  author: chaos.jetzt
+  description: Ansible role to install and configure Dokuwiki
+
+  license: GPL-3.0-or-later
+
+  min_ansible_version: 2.0
+
+  galaxy_tags:
+    - php
+    - dokuwiki
+    - wiki
+    - web
+
+dependencies: []

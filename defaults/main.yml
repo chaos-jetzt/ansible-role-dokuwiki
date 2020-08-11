@@ -1,0 +1,81 @@
+---
+dokuwiki_basedir: /var/www/html
+dokuwiki_datadir: "{{ dokuwiki_basedir }}/data"
+dokuwiki_plugin_cli: "{{ dokuwiki_basedir }}/bin/plugin.php"
+dokuwiki_deploy_config: true
+dokuwiki_user: "{{ ansible_facts['user_id'] }}"
+dokuwiki_group: "{{ dokuwiki_user }}"
+dokuwiki_file_mode: 0770
+dokuwiki_source: git # git or tar
+dokuwiki_source_git_repo: https://github.com/splitbrain/dokuwiki.git
+dokuwiki_source_git_version: stable
+dokuwiki_source_tar: https://download.dokuwiki.org/src/dokuwiki/dokuwiki-stable.tgz
+
+# Dokuwiki configuration itself, only applied if dokuwiki_deploy_config is true (default)
+
+dokuwiki_plugins:
+  - name: popularity
+    state: absent
+
+dokuwiki_upgrade_plugins: false
+# defaults to false since the upgrade
+# fails with plugins that come shipped with doku wiki
+# see https://github.com/splitbrain/dokuwiki/issues/3227
+
+dokuwiki_title: dokuwiki
+dokuwiki_lang: en
+dokuwiki_acl_enabled: true
+dokuwiki_authtype: plain
+
+dokuwiki_initial_users:
+  - name: admin # admin:admin
+    password: $2y$10$dM9scgQlz4VUNy9bksMz/.JBDWvgdpCQAHGvw2U9Eug3M8JRMCANa
+    realname: administrator
+    email: admin@example.com
+    groups:
+      - admin
+      - users
+
+dokuwiki_superuser:
+  - "@admin"
+
+dokuwiki_manager: []
+dokuwiki_acl_all: 0
+dokuwiki_acl_user: 8
+dokuwiki_updatecheck: true
+dokuwiki_additonal_configuration: []
+
+dokuwiki_addional_acronyms: []
+# Example
+#  - short: CCC
+#    long: Chaos Computer Club e.V.
+#    state: present / absent (optional, present is default)
+
+dokuwiki_addional_entities: []
+# Example
+#  - from: mü
+#    to: µ
+#    state: present / absent (optional, present is default)
+
+dokuwiki_additional_interwikis: []
+# Example
+#  - code: ddg
+#    url: https://duckduckgo.com/?q={NAME}
+#    state: present / absent (optional, present is default)
+
+dokuwiki_additional_schemes: []
+# Example
+#   - xmpp
+#   - sftp
+#
+#   - scheme: xmpp
+#     state: present / absent (optional, present is default)
+#   - scheme: ftp
+#     state: absent
+
+dokuwiki_additional_smileys: []
+# Example
+#   - code: ":CCC:"
+#     image: ccc-logo.png
+#     source: smileys/ccc.png (optional, can be remote, otherwise will use the imge property)
+#     state: present / absent (optional, present is default)
