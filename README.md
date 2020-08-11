@@ -1,7 +1,7 @@
 ansible-role-dokuwiki
 =========
 
-This role installs and configures Dokuwiki the host you specify. It relies heavily on [PeterMosmans](https://github.com/PeterMosmans) work at [ansible-role-dokuwiki](https://github.com/PeterMosmans/ansible-role-dokuwiki) and tries to be as compatible as possible. But since this doesn't fit perfectly with our setup and the new "hogfather" Dokuwiki version, we settled to recreate it.
+This role installs and configures Dokuwiki the host you specify. It's a sucessor to [PeterMosmans](https://github.com/PeterMosmans) work at [ansible-role-dokuwiki](https://github.com/PeterMosmans/ansible-role-dokuwiki). But since this role doesn't fit perfectly with our setup and the new "hogfather" Dokuwiki version, we settled to recreate it.
 
 Requirements
 ------------
@@ -68,9 +68,12 @@ Node: When you want to define multi-dimensional configuration parameters in `dok
 License
 -------
 
-BSD
+TODO
+<!-- BSD -->
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+This role is inspired by [PeterMosmans](https://github.com/PeterMosmans) work at [ansible-role-dokuwiki](https://github.com/PeterMosmans/ansible-role-dokuwiki), but since we felt it didn't meed our demands especialy with some new dokuwiki features (CLI to manage Plugins) we decided to write our own role.
+
+The Initial code is from [e1mo](https://github.com/e1mo/) for the [chaos.jetzt](https://chaos.jetzt) project.
