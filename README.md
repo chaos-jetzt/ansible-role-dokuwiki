@@ -1,7 +1,8 @@
 ansible-role-dokuwiki
 =========
 
-This role installs and configures Dokuwiki the host you specify. It's a sucessor to [PeterMosmans](https://github.com/PeterMosmans) work at [ansible-role-dokuwiki](https://github.com/PeterMosmans/ansible-role-dokuwiki). But since this role doesn't fit perfectly with our setup and the new "hogfather" Dokuwiki version, we settled to recreate it.
+This role installs and configures [splitbrain](https://github.com/splitbrain/)s [Dokuwiki](https://dokuwiki.org) on your hosts. It's a sucessor to [PeterMosmans](https://github.com/PeterMosmans) work at [ansible-role-dokuwiki](https://github.com/PeterMosmans/ansible-role-dokuwiki). But since this role doesn't fit perfectly with our setup and the new "hogfather" Dokuwiki version, we settled to recreate it.
+
 
 Requirements
 ------------
