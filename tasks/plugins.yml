@@ -5,10 +5,12 @@
     mode: "u+x,g+x"
 
 - name: Uninstall plugins marked to uninstall
-  command: "{{ dokuwiki_plugin_cli }} extension uninstall {{ item.name }}"
+  command: "{{ dokuwiki_plugin_cli }} extension uninstall {{ item.name | default(item) }}"
   args:
     chdir: "{{ dokuwiki_basedir }}"
-  when: item.state == "absent"
+  when:
+    - item.state is defined
+    - item.state == "absent"
   ignore_errors: yes
   with_items: "{{ dokuwiki_plugins }}"
 
@@ -19,26 +21,27 @@
   when: dokuwiki_upgrade_plugins
   
 - name: Install plugins marked not to uninstall
-  command: "{{ dokuwiki_plugin_cli }} extension install {{ item.name }}"
+  command: "{{ dokuwiki_plugin_cli }} extension install {{ item.name | default(item) }}"
   args:
     chdir: "{{ dokuwiki_basedir }}"
-  when: item.state != "absent"
+  when:
+    - item.state | default('enabled') != "absent"
   ignore_errors: yes
   with_items: "{{ dokuwiki_plugins }}"
  
 - name: Disable plugins marked as disabled
-  command: "{{ dokuwiki_plugin_cli }} extension disable {{ item.name }}"
+  command: "{{ dokuwiki_plugin_cli }} extension disable {{ item.name | default(item) }}"
   args:
     chdir: "{{ dokuwiki_basedir }}"
-  when: item.state == "disabled"
+  when: item.state | default('enabled') == "disabled"
   ignore_errors: yes
   with_items: "{{ dokuwiki_plugins }}"
  
 - name: Enable plugins marked as enabled
-  command: "{{ dokuwiki_plugin_cli }} extension enable {{ item.name }}"
+  command: "{{ dokuwiki_plugin_cli }} extension enable {{ item.name | default(item) }}"
   args:
     chdir: "{{ dokuwiki_basedir }}"
-  when: item.state == "enabled"
+  when: item.state | default('enabled') == "enabled"
   ignore_errors: yes
   with_items: "{{ dokuwiki_plugins }}"
 
