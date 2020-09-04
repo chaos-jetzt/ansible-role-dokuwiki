@@ -1,5 +1,6 @@
 galaxy_info:
-  author: chaos.jetzt
+  role_name: dokuwiki
+  author: chaos_jetzt
   description: Ansible role to install and configure Dokuwiki
 
   license: GPL-3.0-or-later
