@@ -33,6 +33,7 @@
   git:
     repo: "{{ item.source }}"
     dest: "{{ dokuwiki_basedir }}/lib/plugins/{{ item.name }}"
+    force: yes
   when:
     - item.state | default('enabled') != "absent" and item.source is defined and item.source_type == "git"
   loop: "{{ dokuwiki_plugins }}"
