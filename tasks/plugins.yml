@@ -25,9 +25,17 @@
   args:
     chdir: "{{ dokuwiki_basedir }}"
   when:
-    - item.state | default('enabled') != "absent"
+    - item.state | default('enabled') != "absent" and not item.source is defined
   ignore_errors: yes
   with_items: "{{ dokuwiki_plugins }}"
+
+- name: Clone git plugins
+  git:
+    repo: "{{ item.source }}"
+    dest: "{{ dokuwiki_basedir }}/lib/plugins/{{ item.name }}"
+  when:
+    - item.state | default('enabled') != "absent" and item.source is defined and item.source_type == "git"
+  loop: "{{ dokuwiki_plugins }}"
  
 - name: Disable plugins marked as disabled
   command: "{{ dokuwiki_plugin_cli }} extension disable {{ item.name | default(item) }}"
