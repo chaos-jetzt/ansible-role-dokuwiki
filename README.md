@@ -21,7 +21,9 @@ Example Playbook
 
 <!--Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:-->
 
-Node: When you want to define multi-dimensional configuration parameters in `dokuwiki_additonal_configuration` you can concatenate the levels using `>` in the name as a seperator. So `auth>mysql>server` would become `$conf['auth']['mysql']['server']`.
+Note: When you want to define multi-dimensional configuration parameters in `dokuwiki_additonal_configuration` you can concatenate the levels using `>` in the name as a separator. So `auth>mysql>server` would become `$conf['auth']['mysql']['server']`.
+
+Further more, all strings inside the `dokuwiki_additonal_configuration` list must be wrapped in two quotation marks like so: `"'my string'"`. The double quotation marks tell ansible that the value is a string and so the single quotation marks will be a normal part of the string and placed as a string in the `local.php`. See [#3](https://github.com/chaos-jetzt/ansible-role-dokuwiki/pull/3#issuecomment-719563190) for another explanation why it's done that way.
 
 ```yaml
 ---
@@ -57,13 +59,13 @@ Node: When you want to define multi-dimensional configuration parameters in `dok
           source: "https://www.dokuwiki.org/lib/tpl/dokuwiki/images/logo.png"
     dokuwiki_additonal_configuration:
       - name: 'auth>mysql>server'
-        value: localhost
+        value: "'localhost'"
       - name: 'auth>mysql>user'
-        value: dbuser
+        value: "'dbuser'"
       - name: 'auth>mysql>password'
-        value: localhost
+        value: "'localhost'"
       - name: 'auth>mysql>database'
-        value: localhost
+        value: "'localhost'"
 ```
 
 License
