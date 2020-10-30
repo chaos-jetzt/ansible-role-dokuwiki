@@ -26,44 +26,44 @@ Node: When you want to define multi-dimensional configuration parameters in `dok
 ```yaml
 ---
 - hosts: dokuwiki
-	roles:
+  roles:
     - chaos-jetzt.dokuwiki
-	vars:
-		dokuwiki_basedir: /var/www/dokuwiki
-		dokuwiki_authtype: mysql
-		dokuwiki_user: www-data
-		dokuwiki_plugins:
-			- name: popularity
-				state: absent
-			- name: move
-				state: enabled
-		dokuwiki_addional_acronyms:
-			- short: CCC
-				long: Chaos Computer Club e.V.
-		dokuwiki_addional_entities:
-			- from: mü
-				to: µ
-				state: present
-		dokuwiki_additional_schemes:
-			- xmpp
-			- scheme: gopher
-				state: absent
-		dokuwiki_additional_interwikis:
-			- code: ddg
-				url: https://duckduckgo.com/?q={NAME
-		dokuwiki_additional_smileys:
-			- code: ":dwiki:"
-				image: dwiki.png
-				source: "https://www.dokuwiki.org/lib/tpl/dokuwiki/images/logo.png"
-		dokuwiki_additonal_configuration:
-			- name: 'auth>mysql>server'
-				value: localhost
-			- name: 'auth>mysql>user'
-				value: dbuser
-			- name: 'auth>mysql>password'
-				value: localhost
-			- name: 'auth>mysql>database'
-				value: localhost
+  vars:
+    dokuwiki_basedir: /var/www/dokuwiki
+    dokuwiki_authtype: mysql
+    dokuwiki_user: www-data
+    dokuwiki_plugins:
+      - name: popularity
+        state: absent
+      - name: move
+        state: enabled
+    dokuwiki_addional_acronyms:
+      - short: CCC
+        long: Chaos Computer Club e.V.
+    dokuwiki_addional_entities:
+      - from: mü
+        to: µ
+        state: present
+    dokuwiki_additional_schemes:
+        - xmpp
+        - scheme: gopher
+          state: absent
+    dokuwiki_additional_interwikis:
+        - code: ddg
+          url: https://duckduckgo.com/?q={NAME
+    dokuwiki_additional_smileys:
+        - code: ":dwiki:"
+          image: dwiki.png
+          source: "https://www.dokuwiki.org/lib/tpl/dokuwiki/images/logo.png"
+    dokuwiki_additonal_configuration:
+      - name: 'auth>mysql>server'
+        value: localhost
+      - name: 'auth>mysql>user'
+        value: dbuser
+      - name: 'auth>mysql>password'
+        value: localhost
+      - name: 'auth>mysql>database'
+        value: localhost
 ```
 
 License
