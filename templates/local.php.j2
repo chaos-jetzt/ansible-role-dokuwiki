@@ -15,7 +15,7 @@ $conf['manager'] = '{{ dokuwiki_manager|join(',') }}';
 
 {% if dokuwiki_additonal_configuration is defined %}
 {%   for conf in dokuwiki_additonal_configuration %}
-$conf['{{ conf.name | replace('>', '\'][\'') }}'] = {{ conf.value }};
+$conf['{{ conf.name | replace('>', '\'][\'') }}'] = '{{ conf.value }}';
 {%   endfor %}
 {% endif %}
 
