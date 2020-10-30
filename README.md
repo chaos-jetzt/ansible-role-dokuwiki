@@ -71,8 +71,7 @@ Further more, all strings inside the `dokuwiki_additonal_configuration` list mus
 License
 -------
 
-TODO
-<!-- BSD -->
+This work is licensed under the permissive BSD 3-Clause license. See the [LICENSE](LICENSE) for a full copy of the license text.
 
 Author Information
 ------------------
