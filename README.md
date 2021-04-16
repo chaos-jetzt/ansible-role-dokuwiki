@@ -32,12 +32,15 @@ Further more, all strings inside the `dokuwiki_additonal_configuration` list mus
     - chaos-jetzt.dokuwiki
   vars:
     dokuwiki_basedir: /var/www/dokuwiki
+    dokuwiki_template: bootstrap3
     dokuwiki_authtype: mysql
     dokuwiki_user: www-data
     dokuwiki_plugins:
       - name: popularity
         state: absent
       - name: move
+        state: enabled
+      - name: "template:bootstrap3"
         state: enabled
     dokuwiki_addional_acronyms:
       - short: CCC

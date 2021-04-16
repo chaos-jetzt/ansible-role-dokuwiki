@@ -26,6 +26,7 @@ dokuwiki_title: dokuwiki
 dokuwiki_lang: en
 dokuwiki_acl_enabled: true
 dokuwiki_authtype: plain
+dokuwiki_template: dokuwiki
 
 dokuwiki_initial_users:
   - name: admin # admin:admin
